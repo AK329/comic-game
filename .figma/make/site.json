@@ -1,0 +1,10 @@
+{
+  "description": "Engaging educational game for kids aged 8-12 that explores abandoned NASA equipment on the Moon and Mars through interactive storytelling and puzzles.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

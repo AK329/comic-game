@@ -1,0 +1,5 @@
+[
+  { "id": "rover", "year": 1971, "mass": 210, "position": [0.65, 0.35, 0.65], "unlocked": true },
+  { "id": "reflector", "year": 1969, "position": [-0.55, 0.2, 0.8], "unlocked": false },
+  { "id": "viking", "year": 1976, "position": [0.1, -0.5, 0.85], "unlocked": false }
+]

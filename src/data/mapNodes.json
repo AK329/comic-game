@@ -1,0 +1,16 @@
+{
+ "moon": { "title": "The Forgotten Trail", "tagline": "Follow the signals left behind across two worlds.", "colors": ["#22D3EE", "#8B5CF6", "#FF5FA2"], "nodes": [
+  {"id":"ranger7","name":"Ranger 7","fact":"ranger7","state":"locked","x":22,"y":10,"icon":"probe"},
+  {"id":"surveyor1","name":"Surveyor 1","fact":"surveyor1","state":"locked","x":78,"y":29,"icon":"lander"},
+  {"id":"surveyor3","name":"Surveyor 3","fact":"surveyor3","state":"locked","x":22,"y":48,"icon":"lander"},
+  {"id":"apollo15","name":"Apollo 15 LRV","fact":"apollo15","state":"current","x":78,"y":67,"icon":"rover","missionId":"rover"},
+  {"id":"apollo17","name":"Apollo 17 LRV","fact":"apollo17","state":"locked","x":22,"y":86,"icon":"rover"}
+ ]},
+ "mars": { "title": "The Crimson Horizon", "tagline": "Where eternal dust devils whisper over solar-powered sentinels.", "colors": ["#FFD93B", "#FF7A3D", "#FF5F70"], "nodes": [
+  {"id":"phoenix","name":"Phoenix","fact":"phoenix","state":"completed","x":22,"y":10,"icon":"lander"},
+  {"id":"opportunity","name":"Opportunity","fact":"opportunity","state":"locked","x":78,"y":29,"icon":"rover"},
+  {"id":"spirit","name":"Spirit","fact":"spirit","state":"locked","x":22,"y":48,"icon":"rover"},
+  {"id":"pathfinder","name":"Pathfinder + Sojourner","fact":"pathfinder","state":"locked","x":78,"y":67,"icon":"probe"},
+  {"id":"viking1","name":"Viking 1","fact":"viking1","state":"locked","x":22,"y":86,"icon":"lander"}
+ ]}
+}
