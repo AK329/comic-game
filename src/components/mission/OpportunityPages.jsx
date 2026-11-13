@@ -21,6 +21,10 @@ const solLinks = [
 ]
 const marsReferences = [
   {
+    href: "https://pds.nasa.gov/ds-view/pds/viewBundle.jsp?identifier=urn:nasa:pds:mer1_pancam_sci_raw&version=1.0&utm_source=chatgpt.com",
+    label: "PDS: MER-1 Pancam raw data",
+  },
+  {
     href: "https://astrobiology.nasa.gov/news/evidence-for-ancient-water-on-mars/",
     label: "Evidence for ancient water on Mars",
   },
@@ -68,7 +72,10 @@ export const opportunityCopy = {
     referencesTitle: "Explore the evidence",
     sourcesHeading: "NASA Sources",
     sourceClose: "Close sources",
+    dataSummary:
+      "Dataset record: Opportunity’s Pancam raw science archive runs from January 25, 2004 to June 10, 2018, with visible and near-infrared observations.",
     references: [
+      "PDS: MER-1 Pancam raw data",
       "Evidence for ancient water on Mars",
       "JPL: Details of a wetter Mars",
       "JPL: Liquid water on Mars",
@@ -104,7 +111,10 @@ export const opportunityCopy = {
     referencesTitle: "প্রমাণগুলো আরও দেখো",
     sourcesHeading: "নাসার সূত্র",
     sourceClose: "সূত্র বন্ধ করো",
+    dataSummary:
+      "ডেটাসেটের তথ্য: অপরচুনিটির প্যানক্যাম কাঁচা বিজ্ঞান আর্কাইভ ২৫ জানুয়ারি ২০০৪ থেকে ১০ জুন ২০১৮ পর্যন্ত; এতে দৃশ্যমান ও নিকট-ইনফ্রারেড পর্যবেক্ষণ আছে।",
     references: [
+      "পিডিএস: এমইআর-১ প্যানক্যাম কাঁচা ডেটা",
       "মঙ্গলে প্রাচীন জলের প্রমাণ",
       "জেপিএল: আরও ভেজা মঙ্গলের তথ্য",
       "জেপিএল: মঙ্গলে তরল জলের প্রমাণ",
@@ -197,7 +207,11 @@ export default function OpportunityPage({ side, language, onBack }) {
                         key={link.href}
                         href={link.href}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
+                        onPointerDown={stopFlip}
+                        onMouseDown={stopFlip}
+                        onTouchStart={stopFlip}
+                        onClick={stopFlip}
                       >
                         {copy.learnMore[index]}
                       </a>
@@ -232,13 +246,18 @@ export default function OpportunityPage({ side, language, onBack }) {
               >
                 <X size={16} />
               </button>
+              <p className="opportunity-source-summary">{copy.dataSummary}</p>
               <div className="opportunity-source-links">
                 {marsReferences.map((reference, index) => (
                   <a
                     key={reference.href}
                     href={reference.href}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
+                    onPointerDown={stopFlip}
+                    onMouseDown={stopFlip}
+                    onTouchStart={stopFlip}
+                    onClick={stopFlip}
                   >
                     {copy.references[index]}
                   </a>

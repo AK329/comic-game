@@ -43,8 +43,9 @@
 .opportunity-answer-close:hover{opacity:.7}
 .opportunity-source-button{position:absolute;top:50%;right:2%;z-index:7;transform:translateY(-50%) rotate(2deg);padding:8px 10px;border:2px solid #7e4c35;border-radius:6px;background:#ffe4a8;color:#4b251b;box-shadow:2px 3px 0 #633d2c80;font:700 clamp(10px,2.8cqw,15px)/1.1 'DM Sans','Noto Sans Bengali',sans-serif}
 .opportunity-source-button:hover{background:#fff0c8}
-.opportunity-source-panel{position:absolute;top:calc(50% + 28px);right:2%;z-index:8;width:34%;padding:10px;border:2px solid #7e4c35;border-radius:8px;background:#fff3d9;color:#48241a;box-shadow:4px 5px 0 #633d2c80}
+.opportunity-source-panel{position:absolute;top:calc(50% + 28px);right:2%;z-index:8;width:34%;max-height:44%;box-sizing:border-box;overflow-y:auto;padding:10px;border:2px solid #7e4c35;border-radius:8px;background:#fff3d9;color:#48241a;box-shadow:4px 5px 0 #633d2c80}
 .opportunity-source-close{position:absolute;top:4px;right:4px;padding:2px;background:transparent;color:#48241a}
+.opportunity-source-summary{margin:0 18px 9px 0;font:500 clamp(9px,2.4cqw,13px)/1.25 'DM Sans','Noto Sans Bengali',sans-serif}
 .opportunity-source-links{display:flex;flex-direction:column;gap:5px}
 .opportunity-source-links a{padding:6px 7px;border:2px solid #7e4c35;border-radius:6px;background:#ffe4a8;color:#4b251b;box-shadow:2px 3px 0 #633d2c80;font:700 clamp(8px,2.2cqw,12px)/1.15 'DM Sans','Noto Sans Bengali',sans-serif;text-decoration:none}
 .opportunity-source-links a:hover{background:#fff0c8}

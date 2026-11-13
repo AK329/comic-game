@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { Flag, Rocket } from "lucide-react"
 import "./mission-progress.css"
 
@@ -12,18 +11,11 @@ export default function MissionProgress({ spread, language }) {
     missionSpreads[key].includes(spread),
   )
   const step = mission ? missionSpreads[mission].indexOf(spread) + 1 : 0
-  const [furthest, setFurthest] = useState({ apollo: 0, opportunity: 0 })
-  useEffect(() => {
-    if (!mission) return
-    setFurthest((previous) =>
-      previous[mission] >= step ? previous : { ...previous, [mission]: step },
-    )
-  }, [mission, step])
   if (!mission) return null
 
   const bn = language === "bn"
   const total = missionSpreads[mission].length
-  const reached = Math.max(furthest[mission], step)
+  const reached = step
   const percent = Math.round((reached / total) * 100)
   const title =
     mission === "apollo"

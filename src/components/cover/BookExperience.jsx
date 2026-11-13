@@ -44,18 +44,40 @@ import { ArrowLeft } from "lucide-react"
 import BookApp from "../../BookApp.jsx"
 import cover from "../../assets/hardcover/reference-cover.webp"
 
-const coverUrl =
-  typeof cover ===
-  "string"
-    ? cover
-    : cover.src
+const coverUrl = typeof cover === "string" ? cover : cover.src
 const StableBook = memo(BookApp)
 const DURATION = 1200
 const EASING = "cubic-bezier(0.645, 0.045, 0.355, 1)"
 const FRAME = { width: 1040, height: 720 }
 const CLOSED_LID = "rotateY(0deg) translateZ(4px)"
 const OPEN_LID = "rotateY(-180deg) translateZ(4px)"
+const BOOK_SESSION_KEY = "little-explorer-book-open"
+const BOOK_PAGE_SESSION_KEY = "little-explorer-book-page"
 const nextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve))
+function readBookSession() {
+  if (typeof window === "undefined") return false
+  try {
+    return window.sessionStorage.getItem(BOOK_SESSION_KEY) === "open"
+  } catch {
+    return false
+  }
+}
+function writeBookSession(open) {
+  if (typeof window === "undefined") return
+  try {
+    if (open) window.sessionStorage.setItem(BOOK_SESSION_KEY, "open")
+    else window.sessionStorage.removeItem(BOOK_SESSION_KEY)
+  } catch {}
+}
+function readBookPage() {
+  if (typeof window === "undefined") return 0
+  try {
+    const page = Number(window.sessionStorage.getItem(BOOK_PAGE_SESSION_KEY))
+    return Number.isInteger(page) && page >= 0 ? page : 0
+  } catch {
+    return 0
+  }
+}
 
 async function bounded(promise) {
   let timeout
@@ -74,7 +96,10 @@ async function bounded(promise) {
   }
 }
 export default function BookExperience() {
-  const [phase, setPhase] = useState("closed")
+  const [phase, setPhase] = useState(() =>
+    readBookSession() ? "open" : "closed",
+  )
+  const [initialPage] = useState(readBookPage)
   const [preparing, setPreparing] = useState(false)
   const [host, setHost] = useState(null)
   const [ready, setReady] = useState(false)
@@ -122,11 +147,7 @@ export default function BookExperience() {
 
   useEffect(() => {
     const blockPageFlip = (event) => {
-      if (
-        phaseRef.current !==
-        "open"
-      )
-        event.stopImmediatePropagation()
+      if (phaseRef.current !== "open") event.stopImmediatePropagation()
     }
     const events = ["mousemove", "mouseup", "touchmove", "touchend"]
     events.forEach((name) => window.addEventListener(name, blockPageFlip, true))
@@ -138,6 +159,8 @@ export default function BookExperience() {
 
   const mode = useCallback((value) => {
     phaseRef.current = value
+    if (value === "open") writeBookSession(true)
+    if (value === "closed") writeBookSession(false)
     setPhase(value)
   }, [])
 
@@ -149,30 +172,18 @@ export default function BookExperience() {
   }, [])
 
   const measureViewport = useCallback(() => {
-    if (
-      phaseRef.current ===
-        "opening" ||
-      phaseRef.current ===
-        "closing"
-    ) {
+    if (phaseRef.current === "opening" || phaseRef.current === "closing") {
       deferredResize.current = true
       return
     }
     const viewport = window.visualViewport
-    const width =
-      viewport?.width ||
-      window.innerWidth
-    const height =
-      viewport?.height ||
-      window.innerHeight
+    const width = viewport?.width || window.innerWidth
+    const height = viewport?.height || window.innerHeight
     const mobile =
-      width <
-        1024 ||
-      height <
-        720 ||
+      width < 1024 ||
+      height < 720 ||
       (matchMedia("(pointer: coarse)").matches &&
-        Math.min(width, height) <
-          1100)
+        Math.min(width, height) < 1100)
     const styles = getComputedStyle(root.current)
     const w = Math.max(
       1,
@@ -182,12 +193,7 @@ export default function BookExperience() {
       1,
       height - parseFloat(styles.paddingTop) - parseFloat(styles.paddingBottom),
     )
-    const angle =
-      mobile &&
-      h >
-        w
-        ? 90
-        : 0
+    const angle = mobile && h > w ? 90 : 0
     const planeWidth = angle ? h : w
     const planeHeight = angle ? w : h
     const value = {
@@ -207,16 +213,11 @@ export default function BookExperience() {
     }
     const previous = viewRef.current
     if (
-      previous.mobile ===
-        value.mobile &&
-      previous.width ===
-        value.width &&
-      previous.height ===
-        value.height &&
-      previous.angle ===
-        value.angle &&
-      previous.scale ===
-        value.scale
+      previous.mobile === value.mobile &&
+      previous.width === value.width &&
+      previous.height === value.height &&
+      previous.angle === value.angle &&
+      previous.scale === value.scale
     )
       return
     viewRef.current = value
@@ -228,14 +229,8 @@ export default function BookExperience() {
       const binding = root.current?.querySelector(".book-binding")
       const block = binding?.querySelector(".stf__block")
       if (!block) return
-      if (
-        current?.block ===
-        block
-      ) {
-        if (
-          current.layer.parentElement !==
-          block
-        )
+      if (current?.block === block) {
+        if (current.layer.parentElement !== block)
           block.appendChild(current.layer)
         return
       }
@@ -268,13 +263,7 @@ export default function BookExperience() {
   }, [measureViewport])
 
   useLayoutEffect(() => {
-    if (
-      (phase ===
-        "open" ||
-        phase ===
-          "closed") &&
-      deferredResize.current
-    ) {
+    if ((phase === "open" || phase === "closed") && deferredResize.current) {
       deferredResize.current = false
       measureViewport()
     }
@@ -289,11 +278,7 @@ export default function BookExperience() {
     let localBlockX = 0
     let localBlockY = 0
     let parent = host.block
-    while (
-      parent &&
-      parent !==
-        host.binding
-    ) {
+    while (parent && parent !== host.binding) {
       localBlockX += parent.offsetLeft
       localBlockY += parent.offsetTop
       parent = parent.offsetParent
@@ -301,23 +286,15 @@ export default function BookExperience() {
     Object.assign(lid.current.style, {
       left: `${localWidth / 2 - localBlockX}px`,
       top: `${-localBlockY}px`,
-      width: `${
-        localWidth /
-        2
-      }px`,
+      width: `${localWidth / 2}px`,
       height: `${localHeight}px`,
     })
     const viewport = window.visualViewport
-    const vw =
-      viewport?.width ||
-      innerWidth
-    const vh =
-      viewport?.height ||
-      innerHeight
+    const vw = viewport?.width || innerWidth
+    const vh = viewport?.height || innerHeight
     const { mobile, width, height, angle, scale } = viewRef.current
     const coverWidth = Math.min(
-      (mobile ? width : vw) *
-        0.76,
+      (mobile ? width : vw) * 0.76,
       460,
       ((mobile ? height : vh) - 112) * 0.814,
     )
@@ -338,19 +315,13 @@ export default function BookExperience() {
       mobile ? 0 : -angle
     }deg) scale(${coverWidth / ((localWidth / 2) * scale)},${coverHeight / (localHeight * scale)})`
     const left = [...host.block.querySelectorAll(".left-paper")].find(
-      (page) =>
-        getComputedStyle(page).display !==
-        "none",
+      (page) => getComputedStyle(page).display !== "none",
     )
     const base = left ? getComputedStyle(left).transform : "none"
     pose.current = {
       closed,
       left,
-      base:
-        base ===
-        "none"
-          ? ""
-          : base,
+      base: base === "none" ? "" : base,
     }
     return pose.current
   }, [host, cancelAnimations])
@@ -359,8 +330,7 @@ export default function BookExperience() {
       if (!value) return []
       const options = {
         duration:
-          !paused &&
-          matchMedia("(prefers-reduced-motion: reduce)").matches
+          !paused && matchMedia("(prefers-reduced-motion: reduce)").matches
             ? 0
             : DURATION,
         easing: EASING,
@@ -423,10 +393,7 @@ export default function BookExperience() {
     try {
       screen.orientation?.unlock?.()
     } catch {}
-    if (
-      document.fullscreenElement ===
-      root.current
-    )
+    if (document.fullscreenElement === root.current)
       document.exitFullscreen().catch(() => {})
     ownedFullscreen.current = false
     requestAnimationFrame(() => lid.current?.focus({ preventScroll: true }))
@@ -435,25 +402,12 @@ export default function BookExperience() {
     if (!host || !lid.current) return
     token.current++
     const value = geometry()
-    if (
-      phaseRef.current ===
-        "closed" ||
-      phaseRef.current ===
-        "closing"
-    ) {
+    if (phaseRef.current === "closed" || phaseRef.current === "closing") {
       timeline(value, false, true)
-      if (
-        phaseRef.current ===
-        "closing"
-      )
-        finishClosed()
+      if (phaseRef.current === "closing") finishClosed()
     } else {
       restOpen()
-      if (
-        phaseRef.current ===
-        "opening"
-      )
-        mode("open")
+      if (phaseRef.current === "opening") mode("open")
     }
     setReady(true)
   }, [host, view, geometry, timeline, restOpen, mode, finishClosed])
@@ -461,11 +415,7 @@ export default function BookExperience() {
   useEffect(() => {
     if (!host) return
     const observer = new ResizeObserver(() => {
-      if (
-        phaseRef.current ===
-        "closed"
-      )
-        timeline(geometry(), false, true)
+      if (phaseRef.current === "closed") timeline(geometry(), false, true)
     })
     observer.observe(host.binding)
     return () => observer.disconnect()
@@ -477,9 +427,7 @@ export default function BookExperience() {
         ".paper, .topbar, .bottom-bar, .chapter-tabs, .companion",
       )
       .forEach((element) => {
-        element.inert =
-          phase !==
-          "open"
+        element.inert = phase !== "open"
       })
   }, [phase, host])
 
@@ -496,12 +444,7 @@ export default function BookExperience() {
     body.style.overscrollBehavior = "none"
     html.style.overflow = "hidden"
     const preventZoom = (event) => {
-      if (
-        event.type ===
-          "gesturestart" ||
-        event.touches?.length >
-          1
-      )
+      if (event.type === "gesturestart" || event.touches?.length > 1)
         event.preventDefault()
     }
     document.addEventListener("gesturestart", preventZoom, { passive: false })
@@ -520,40 +463,24 @@ export default function BookExperience() {
   const close = useCallback(async () => {
     if (
       !ready ||
-      phaseRef.current ===
-        "closed" ||
-      phaseRef.current ===
-        "closing"
+      phaseRef.current === "closed" ||
+      phaseRef.current === "closing"
     )
       return
     const id = ++token.current
     mode("closing")
     let list = animations.current
-    if (
-      list.length &&
-      list[0].playState ===
-        "running"
-    )
+    if (list.length && list[0].playState === "running")
       list.forEach((animation) => animation.reverse())
     else list = timeline(geometry(), true)
     try {
       await Promise.all(list.map((animation) => animation.finished))
-      if (
-        id ===
-        token.current
-      )
-        finishClosed()
+      if (id === token.current) finishClosed()
     } catch {}
   }, [ready, mode, geometry, timeline, finishClosed])
 
   async function open() {
-    if (
-      !ready ||
-      preparing ||
-      phaseRef.current !==
-        "closed"
-    )
-      return
+    if (!ready || preparing || phaseRef.current !== "closed") return
     setPreparing(true)
     if (view.mobile) {
       try {
@@ -659,7 +586,11 @@ export default function BookExperience() {
       <style>{STYLES}</style>
       <div className="experience-plane">
         <div className="experience-game">
-          <StableBook immersiveMobile={view.mobile} onBookReady={bookReady} />
+          <StableBook
+            initialPage={initialPage}
+            immersiveMobile={view.mobile}
+            onBookReady={bookReady}
+          />
         </div>
         {phase !== "closed" && (
           <button

@@ -3,6 +3,10 @@
 A gentle, bilingual space-exploration book for ages 8–12, built with **Next.js
 App Router and JavaScript/JSX**, React, Three.js, Framer Motion, and react-pageflip.
 
+## Live Demo
+
+[Open the deployed experience](https://comic-game-green.vercel.app/)
+
 ## Requirements
 
 Node.js 22 with its bundled npm. Install dependencies with `npm ci`

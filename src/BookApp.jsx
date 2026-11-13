@@ -52,6 +52,7 @@ import {
   StoryPuzzleRight,
 } from "./components/storyPuzzle/StoryPuzzlePages.jsx"
 const chapterOrder = [2, 4, 6, 7, 5, 8, 10, 11, 12, 13, 14, 15]
+const BOOK_PAGE_SESSION_KEY = "little-explorer-book-page"
 const chapterPages = {
   0: 0,
   3: 2,
@@ -66,6 +67,12 @@ const chapterPages = {
   ),
 }
 const PageNavigation = createContext(null)
+function rememberBookPage(page) {
+  if (typeof window === "undefined") return
+  try {
+    window.sessionStorage.setItem(BOOK_PAGE_SESSION_KEY, String(page))
+  } catch {}
+}
 const Page = forwardRef(function Page(
   { children, number, label, className = "" },
   ref,
@@ -402,7 +409,10 @@ export default function BookApp({
                       )
                   }}
                   onFlip={(event) =>
-                    setSpread(chapterOrder[Math.floor(event.data / 2)])
+                    (() => {
+                      rememberBookPage(event.data)
+                      setSpread(chapterOrder[Math.floor(event.data / 2)])
+                    })()
                   }
                 >
                   <Page number={1} label={text.map.folioMars}>
