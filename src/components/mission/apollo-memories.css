@@ -1,0 +1,31 @@
+.paper:has(.apollo-memories)>.paper-content{position:static;padding:0;height:100%}
+.paper:has(.apollo-memories)>.page-foot{display:none}
+.apollo-memories{--apollo-navy:#34486e;--apollo-cream:#fcf8e9;--apollo-gold:#efca78;--apollo-pink:#d59b9c;--apollo-sage:#9bb58d;position:absolute;inset:9px 8px 13px;container-type:inline-size;isolation:isolate;overflow:hidden;border-radius:20px;color:var(--apollo-navy);font-family:var(--cover-hand-font,'Opening Hand'),'Noto Sans Bengali',cursive;background:radial-gradient(ellipse at 20% 90%,#e7cd9630,transparent 60%);box-shadow:inset 0 0 20px #c7a97418}
+.apollo-memory-heading{position:absolute;top:5%;left:10%;width:80%;margin:0;color:var(--apollo-navy);text-align:center;font-family:var(--map-display-font,'Opening Bubble'),'Noto Sans Bengali',sans-serif;font-weight:700;font-size:6.2cqw;line-height:1.12;letter-spacing:0}
+.apollo-memory-divider{position:absolute;top:17%;left:29%;width:42%;display:flex;align-items:center;gap:7%;color:var(--apollo-navy)}
+.apollo-memory-divider span{flex:1;border-top:1.5px dashed currentColor;transform:rotate(-4deg)}
+.apollo-memory-divider span:last-child{transform:rotate(4deg)}
+.apollo-memory-divider svg{width:6cqw;height:6cqw;fill:currentColor}
+.apollo-memory-gallery{position:absolute;inset:25% 12% 14%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10% 8%}
+.apollo-memory-photo{position:relative;min-width:0;min-height:0;margin:0;padding:5% 5% 0;background:var(--apollo-cream);border:1px solid #a9997740;box-shadow:1px 4px 7px #5d4c3b38;transform:rotate(-7deg)}
+.apollo-memory-photo-1{transform:rotate(6deg)}
+.apollo-memory-photo-2{transform:rotate(-6deg)}
+.apollo-memory-photo-3{transform:rotate(7deg)}
+.apollo-memory-photo>img{display:block;width:100%;height:80%;object-fit:cover;filter:saturate(.7) contrast(1.03)}
+.apollo-memory-photo figcaption{height:20%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:2.7cqw;line-height:1.05;color:var(--apollo-navy)}
+.apollo-memory-tape{position:absolute;left:-12%;top:-4%;width:53%;height:15%;z-index:2;transform:rotate(-29deg);opacity:.9;background-color:var(--apollo-gold);background-image:repeating-linear-gradient(0deg,transparent 0 5px,#fff8 5px 10px),repeating-linear-gradient(90deg,transparent 0 5px,#fff8 5px 10px);clip-path:polygon(3% 0,97% 0,100% 16%,97% 32%,100% 50%,97% 68%,100% 84%,97% 100%,3% 100%,0 84%,3% 68%,0 50%,3% 32%,0 16%)}
+.apollo-memory-photo-1 .apollo-memory-tape{left:auto;right:-12%;transform:rotate(34deg);background-color:var(--apollo-pink);background-image:repeating-linear-gradient(45deg,transparent 0 5px,#fff7 5px 10px)}
+.apollo-memory-photo-2 .apollo-memory-tape{background-color:#7c9cbb;background-image:radial-gradient(circle,#fff9 25%,transparent 29%);background-size:9px 9px}
+.apollo-memory-photo-3 .apollo-memory-tape{left:auto;right:-12%;transform:rotate(28deg);background-color:var(--apollo-sage);background-image:repeating-linear-gradient(0deg,transparent 0 5px,#fff9 5px 10px)}
+.apollo-memory-decor{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.apollo-memory-trails{width:100%;height:100%;fill:none;stroke:var(--apollo-navy);stroke-width:1.5;stroke-dasharray:6 7;opacity:.65}
+.apollo-memory-trails path:last-child{stroke:var(--apollo-pink)}
+.apollo-memory-rocket{position:absolute;left:4%;top:16%;width:13%;height:12%;object-fit:contain;transform:rotate(-12deg);mix-blend-mode:multiply}
+.apollo-memory-planet{position:absolute;right:3%;top:16%;width:15%;mix-blend-mode:multiply}
+.apollo-memory-moon{position:absolute;right:4%;bottom:3%;width:16%;mix-blend-mode:multiply}
+.apollo-memory-star{position:absolute;width:5%;height:auto;fill:var(--apollo-gold);stroke:var(--apollo-navy);stroke-width:1.4}
+.apollo-memory-star-0{left:5%;top:37%}.apollo-memory-star-1{right:4%;top:43%;fill:none}.apollo-memory-star-2{left:5%;top:68%;fill:var(--apollo-pink)}.apollo-memory-star-3{right:5%;top:69%}.apollo-memory-star-4{left:18%;bottom:5%;fill:none}.apollo-memory-star-5{left:43%;bottom:8%;width:4%;fill:var(--apollo-sage)}
+.apollo-memories .apollo-memory-note{position:absolute;left:15%;bottom:4%;width:61%;margin:0;text-align:center;color:var(--apollo-navy);font:inherit;font-size:3cqw;line-height:1.2;transform:rotate(-2deg)}
+.apollo-memory-folio{position:absolute;left:5%;bottom:3%;font-size:2.6cqw;opacity:.7}
+.apollo-memories:lang(bn) .apollo-memory-heading{font-size:5.3cqw}
+.apollo-memories:lang(bn) figcaption{font-size:2.5cqw}

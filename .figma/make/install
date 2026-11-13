@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ -f package-lock.json ]; then
+  exec npm ci --prefer-offline --no-audit --no-fund
+fi
+exec npm install --prefer-offline --no-audit --no-fund

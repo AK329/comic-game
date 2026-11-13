@@ -1,0 +1,61 @@
+.paper:has(.mission-scrapbook)>.paper-content{position:static;padding:0;height:100%}
+.paper:has(.mission-scrapbook)>.page-foot{display:none}
+.mission-scrapbook{position:absolute;inset:9px 8px 13px;container-type:inline-size;isolation:isolate;overflow:hidden;color:#2c3854;border:1px solid #89765566;font-family:var(--cover-hand-font,'Opening Hand'),'Noto Sans Bengali',cursive}
+.mission-cork{background:#d9ad75 url('../../assets/mission/cork.webp');background-size:140px 50px;box-shadow:inset -12px 0 19px -14px #58412799,inset 0 0 20px #93612e1f}
+.mission-cream{background:#fffdf1;box-shadow:inset 14px 0 22px -18px #76634580}
+.mission-scrap-heading{position:absolute;top:5%;left:20%;width:60%;min-height:10%;box-sizing:border-box;margin:0;display:flex;align-items:center;justify-content:center;padding:7px 12px;border:5px solid #354566;border-radius:40px;background:#fcf3dc;box-shadow:0 3px 0 #fcf4e673;font-family:var(--map-display-font,'Opening Bubble'),'Noto Sans Bengali',sans-serif;font-size:5.2cqw;font-weight:600;line-height:1.1;letter-spacing:0;color:#354566;text-align:center}
+.mission-cream .mission-scrap-heading{left:26%;width:54%;border:0;background:#354566;color:#fff6df;box-shadow:3px 6px 0 #e9ad75;font-size:5cqw;min-height:9%}
+.mission-character-cards{position:absolute;top:26%;left:7%;right:7%;height:57%;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.mission-character{position:relative;padding:9px 9px 37px;background:#fffef5;border:2px solid #353947;box-shadow:2px 5px 3px #5e3b2940;border-radius:17px;min-width:0;transform:rotate(-4deg);color:#303c52}
+.mission-character.available{outline:3px solid transparent;outline-offset:3px;transition:outline-color .2s}
+.mission-character.available:focus-visible,.mission-character.unavailable:focus-visible,.mission-explore-button:focus-visible{outline:3px solid #2b97b8;outline-offset:5px}
+.mission-character.available:hover{outline-color:#90f0e899}
+.mission-character.unavailable{transform:rotate(3deg)}
+.mission-character>img{display:block;width:100%;height:100%;object-fit:cover;border-radius:7px}
+.mission-character-number{position:absolute;bottom:3px;left:45%;font-size:7cqw;line-height:1;font-weight:400}
+.mission-character-check{position:absolute;bottom:6px;right:9px;color:#77b66b;filter:drop-shadow(1px 1px 0 #41713c);width:7cqw;height:7cqw}
+.mission-masking-tape{position:absolute;left:25%;top:-13px;z-index:2;width:48%;height:29px;transform:rotate(-5deg);background:linear-gradient(#e8d8acdd,#f7ebc8e8 47%,#ccb98fb8 50%,#ecdfb8e0 54%);border:1px solid #76654a9e;clip-path:polygon(2% 0,98% 0,95% 14%,100% 28%,96% 42%,100% 57%,96% 73%,100% 87%,98% 100%,0 100%,3% 87%,0 74%,4% 59%,0 45%,4% 29%,0 14%)}
+.mission-character.unavailable .mission-masking-tape{transform:rotate(3deg)}
+.mission-astronaut{position:relative;height:100%;background:linear-gradient(130deg,#d6d8e0,#aeb3c1);border-radius:7px;overflow:hidden}
+.mission-astronaut img{position:absolute;object-fit:contain;filter:grayscale(.5);mix-blend-mode:multiply}
+.astronaut-head{top:12%;left:4%;width:92%;height:54%}
+.astronaut-boots{bottom:6%;left:10%;width:83%;height:27%}
+.mission-coming-ribbon{position:absolute;left:1%;right:1%;top:61%;font-size:4.15cqw;line-height:1.2;padding:7px 3px;border:2px solid #4c4d60;border-radius:2px;background:#f8efd8;color:#383b4f;box-shadow:0 0 0 4px #fff;white-space:nowrap}
+.mission-second-number{position:absolute;top:85%;left:69%;width:36px;height:36px;background:#fbf1d8e0;border-radius:50%;font-size:6cqw;line-height:36px;text-align:center}
+.mission-character-hint{position:absolute;left:56%;bottom:4%;background:#fff8e4;border:2px solid #354566;padding:7px 10px;border-radius:16px;font-size:4cqw;box-shadow:1px 3px 0 #70513250;z-index:5}
+.mission-scrap-decor{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.mission-sketch-trail{position:absolute;inset:0;width:100%;height:100%}
+.mission-sketch-star{position:absolute;width:6%;height:auto;color:#323744;left:8%;top:14%;transform:rotate(10deg)}
+.mission-star-1{left:13%;top:5%;width:4%}.mission-star-2{left:88%;top:6%;width:5%}.mission-star-3{left:17%;top:85%;width:3%}.mission-star-4{left:9%;top:89%;width:6%}.mission-star-5{left:30%;top:92%;width:4%}.mission-star-6{left:34%;top:81%;width:3%}
+.mission-sketch-planet{position:absolute;right:4%;top:12%;width:14%;mix-blend-mode:multiply;filter:grayscale(.3)}
+.mission-cork .mission-sketch-planet{top:auto;bottom:5%;right:10%;transform:rotate(-20deg)}
+.mission-rover-polaroid{position:absolute;top:22%;left:27%;width:48%;height:45%;box-sizing:border-box;padding:10px 10px 30px;background:#fffdf3;border:1.5px solid #454954;box-shadow:1px 2px 2px #3f3d3920;transform:rotate(-.5deg)}
+.mission-rover-polaroid>img{width:100%;height:100%;object-fit:cover;border:1px solid #343c49;display:block}
+.mission-rover-polaroid .mission-masking-tape{width:36%;left:33%;top:-13px}
+.mission-rover-polaroid .lower-tape{left:auto;top:auto;right:-12%;bottom:4%;transform:rotate(-47deg);width:32%;height:25px}
+.mission-photo-note{position:absolute;bottom:6px;left:10px;right:10px;font-size:3.2cqw;text-align:center;line-height:1;color:#526782}
+.mission-ticket-tags{position:absolute;left:13%;top:71%;width:52%;display:flex;gap:15px;align-items:center;z-index:2}
+.mission-ticket-tags>span{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-height:34px;padding:2px 10px 2px 15px;background:#e5f2f4;border:2px solid #414956;border-radius:14px;font-size:3.6cqw;white-space:nowrap;line-height:1.2;box-shadow:1px 2px 0 #55503e20}
+.mission-ticket-tags>span:before{content:'';position:absolute;left:5px;width:4px;height:4px;border:1.5px solid #414956;border-radius:50%;background:#fffaf0}
+.mission-ticket-tags>span:last-child{background:#f9c78a}
+.mission-explore-button{position:absolute;top:81%;left:16%;width:43%;min-height:12%;padding:10px 12px;background:linear-gradient(145deg,#c3e58d,#91c96b);border:3px solid #466c46;border-radius:30px;color:#2e5132;box-shadow:0 6px 0 #80ab7180;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-size:4.1cqw;line-height:1.1;transition:transform .2s,box-shadow .2s;z-index:3}
+.mission-explore-button:before{content:'';position:absolute;left:9%;top:9%;width:18%;height:7px;border-radius:50%;background:#f8ffe080;transform:rotate(-22deg)}
+.mission-explore-button:hover{transform:translateY(-2px);box-shadow:0 8px 0 #80ab7180}
+.mission-explore-button:active{transform:translateY(3px);box-shadow:0 3px 0 #80ab7180}
+.mission-explore-button svg{width:4cqw;height:4cqw;pointer-events:none}
+.mission-waving-pip{position:absolute;bottom:0;right:-1%;width:35%;height:35%;object-fit:contain;object-position:bottom;mix-blend-mode:multiply;pointer-events:none}
+.mission-sketch-rocket{position:absolute;top:5%;left:8%;width:12%;height:14%;object-fit:contain;mix-blend-mode:multiply}
+.mission-watercolor{position:absolute;inset:24% 1% 2% 6%;background:radial-gradient(ellipse at 10% 28%,#abcbd9a0 0 12%,transparent 13%),radial-gradient(ellipse at 12% 20%,#b9d9e28a 0 10%,transparent 11%),radial-gradient(ellipse at 80% 11%,#a6cfe08a 0 11%,transparent 12%),radial-gradient(ellipse at 86% 20%,#b0d3e189 0 13%,transparent 14%),radial-gradient(ellipse at 76% 90%,#9bc8db80 0 19%,transparent 20%);filter:blur(3px)}
+.mission-cream .mission-star-0{left:83%;top:21%}.mission-cream .mission-star-1{left:16%;top:22%}.mission-cream .mission-star-2{left:13%;top:64%;width:4%}.mission-cream .mission-star-3{left:84%;top:54%;width:4%}.mission-cream .mission-star-4{display:none}.mission-cream .mission-star-5{left:89%;top:5%;width:3%}.mission-cream .mission-star-6{display:none}.mission-cream .mission-sketch-planet{top:5%;right:5%;width:16%}
+.mission-passport-overlay{position:fixed;inset:0;z-index:1000;background:#132b48a1;backdrop-filter:blur(3px);display:grid;place-items:center;padding:25px;overflow-y:auto;font-family:var(--map-body-font,'DM Sans'),'Noto Sans Bengali',sans-serif;color:#2c3854}
+.mission-passport-dialog{position:relative;width:min(470px,94vw);max-height:calc(100dvh - 50px);overflow-y:auto;box-sizing:border-box;padding:28px;background:#fff8e9;border:4px solid #354566;border-radius:20px;box-shadow:0 8px 0 #d7b67d,0 15px 50px #081b3440}
+.mission-passport-close{position:absolute;right:9px;top:9px;background:#ed755b;color:#fff;border:2px solid #f4ad8f;width:38px;height:38px;border-radius:50%;display:grid;place-items:center}
+.mission-dialog-eyebrow{font-size:11px;letter-spacing:1.4px;color:#976545;margin:6px 36px 10px 0}
+.mission-passport-dialog h2{font-family:'Opening Bubble','Noto Sans Bengali',sans-serif;font-size:28px;letter-spacing:0;color:#2c3854;margin:0 0 13px}
+.mission-passport-dialog p{font-size:13px;line-height:1.65;color:#585e65;white-space:normal}
+.mission-dialog-story{border-bottom:1px dashed #c5b596;padding-bottom:15px;margin-bottom:15px}
+.mission-dialog-answer{margin:13px 0}.mission-dialog-answer>strong{font-size:14px;color:#476947}.mission-dialog-answer p{margin-top:4px}
+.mission-collect-button{width:100%;min-height:48px;background:#9fd07e;color:#234329;border:2px solid #668c56;border-radius:12px;font:inherit;font-size:14px;display:flex;gap:10px;align-items:center;justify-content:center;padding:10px;margin-top:20px}
+.mission-passport-dialog button:focus-visible,.mission-passport-dialog input:focus-visible{outline:3px solid #3183b7;outline-offset:3px}
+.mission-scrapbook:lang(bn) .mission-scrap-heading{font-size:4cqw}.mission-scrapbook:lang(bn) .mission-coming-ribbon{font-size:3.25cqw}.mission-scrapbook:lang(bn) .mission-explore-button{font-size:3.3cqw}.mission-scrapbook:lang(bn) .mission-ticket-tags>span{font-size:3cqw}
+@media(max-width:1000px) and (min-width:641px){.mission-character-cards{gap:13px}.mission-character{padding:6px 6px 29px;border-radius:12px}.mission-masking-tape{height:20px;top:-9px}.mission-ticket-tags{gap:8px}.mission-ticket-tags>span{padding:3px 5px 3px 10px;min-height:26px}.mission-rover-polaroid{padding:7px 7px 22px}.mission-photo-note{bottom:4px}.mission-explore-button{padding:6px;gap:4px;border-width:2px}.mission-second-number{width:28px;height:28px;line-height:28px}.mission-coming-ribbon{padding:5px 1px;box-shadow:0 0 0 2px #fff}}

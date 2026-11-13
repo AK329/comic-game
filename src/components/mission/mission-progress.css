@@ -1,0 +1,15 @@
+.book-area.has-mission-progress{padding-top:40px}
+.has-mission-progress .chapter-tabs{top:89px}
+.mission-progress{--mission-accent:#a8d9ed;position:absolute;top:0;left:55px;right:55px;box-sizing:border-box;min-height:31px;display:flex;align-items:center;gap:12px;padding:7px 12px;border:1px solid #e4d4b82e;border-radius:8px;background:#162d3de8;color:#fff3dc;box-shadow:0 2px 7px #2b1a1526;font-family:'DM Sans','Noto Sans Bengali',sans-serif}
+.mission-progress-opportunity{--mission-accent:#f4b18a;background:#482f2be8}
+.mission-progress-name{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;white-space:nowrap}
+.mission-progress-name svg{color:var(--mission-accent)}
+.mission-progress progress{flex:1;min-width:30px;height:6px;appearance:none;border:none;border-radius:999px;overflow:hidden;background:#ffffff20;color:var(--mission-accent)}
+.mission-progress progress::-webkit-progress-bar{background:#ffffff20;border-radius:999px}
+.mission-progress progress::-webkit-progress-value{background:var(--mission-accent);border-radius:999px;transition:width .5s ease}
+.mission-progress progress::-moz-progress-bar{background:var(--mission-accent);border-radius:999px}
+.mission-progress-count{color:#eee0cb;font-size:10px;white-space:nowrap}
+.mission-progress-percent{font-size:11px;color:var(--mission-accent);min-width:30px;text-align:right;font-variant-numeric:tabular-nums}
+.book-experience:not(.phase-open) .mission-progress{visibility:hidden}
+@media(max-width:640px){.mission-progress{gap:9px}.mission-progress-name{font-size:13px}.mission-progress-count,.mission-progress-percent{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.mission-progress progress::-webkit-progress-value{transition:none}}

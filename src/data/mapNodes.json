@@ -1,0 +1,182 @@
+{
+  "moon": {
+    "title": "The Forgotten Trail",
+    "tagline": "Follow the signals left behind across two worlds.",
+    "colors": [
+      "#22D3EE",
+      "#8B5CF6",
+      "#FF5FA2"
+    ],
+    "nasaEyesUrl": "https://eyes.nasa.gov/apps/solar-system/#/earth_moon",
+    "nasaEyesLabel": "Eyes on the Solar System - Moon - NASA/JPL",
+    "nasaModelUrl": "https://solarsystem.nasa.gov/gltf_embed/2366/",
+    "nodes": [
+      {
+        "id": "ranger7",
+        "name": "Ranger 7",
+        "fact": "ranger7",
+        "state": "locked",
+        "x": 22,
+        "y": 10,
+        "lat": -10.63,
+        "lon": -20.6,
+        "coordLabel": "10.63° S, 20.60° W",
+        "region": "Mare Cognitum",
+        "year": 1964,
+        "icon": "probe",
+        "nasaUrl": "https://science.nasa.gov/mission/ranger-7/"
+      },
+      {
+        "id": "surveyor1",
+        "name": "Surveyor 1",
+        "fact": "surveyor1",
+        "state": "locked",
+        "x": 78,
+        "y": 29,
+        "lat": -2.45,
+        "lon": -43.22,
+        "coordLabel": "2.45° S, 43.22° W",
+        "region": "Oceanus Procellarum",
+        "year": 1966,
+        "icon": "lander",
+        "nasaUrl": "https://science.nasa.gov/mission/surveyor-1/"
+      },
+      {
+        "id": "surveyor3",
+        "name": "Surveyor 3",
+        "fact": "surveyor3",
+        "state": "locked",
+        "x": 22,
+        "y": 48,
+        "lat": -3.01,
+        "lon": -23.42,
+        "coordLabel": "3.01° S, 23.42° W",
+        "region": "Oceanus Procellarum",
+        "year": 1967,
+        "icon": "lander",
+        "nasaUrl": "https://science.nasa.gov/mission/surveyor-3/"
+      },
+      {
+        "id": "apollo15",
+        "name": "Apollo 15 LRV",
+        "fact": "apollo15",
+        "state": "current",
+        "x": 78,
+        "y": 67,
+        "lat": 26.13,
+        "lon": 3.63,
+        "coordLabel": "26.13° N, 3.63° E",
+        "region": "Hadley–Apennine",
+        "year": 1971,
+        "icon": "rover",
+        "missionId": "rover",
+        "nasaUrl": "https://www.nasa.gov/mission/apollo-15/"
+      },
+      {
+        "id": "apollo17",
+        "name": "Apollo 17 LRV",
+        "fact": "apollo17",
+        "state": "locked",
+        "x": 22,
+        "y": 86,
+        "lat": 20.19,
+        "lon": 30.77,
+        "coordLabel": "20.19° N, 30.77° E",
+        "region": "Taurus–Littrow",
+        "year": 1972,
+        "icon": "rover",
+        "nasaUrl": "https://www.nasa.gov/mission/apollo-17/"
+      }
+    ]
+  },
+  "mars": {
+    "title": "The Crimson Horizon",
+    "tagline": "Where eternal dust devils whisper over solar-powered sentinels.",
+    "colors": [
+      "#FFD93B",
+      "#FF7A3D",
+      "#FF5F70"
+    ],
+    "nasaEyesUrl": "https://eyes.nasa.gov/apps/solar-system/#/mars",
+    "nasaEyesLabel": "Eyes on the Solar System - Mars - NASA/JPL",
+    "nasaModelUrl": "https://science.nasa.gov/resource/planet-mars-3d-model/",
+    "nodes": [
+      {
+        "id": "phoenix",
+        "name": "Phoenix",
+        "fact": "phoenix",
+        "state": "completed",
+        "x": 22,
+        "y": 10,
+        "lat": 68.22,
+        "lon": -125.75,
+        "coordLabel": "68.22° N, 125.75° W",
+        "region": "Vastitas Borealis (Green Valley)",
+        "year": 2008,
+        "icon": "lander",
+        "nasaUrl": "https://science.nasa.gov/mission/mars-phoenix/"
+      },
+      {
+        "id": "opportunity",
+        "name": "Opportunity",
+        "fact": "opportunity",
+        "state": "current",
+        "missionId": "opportunity",
+        "x": 78,
+        "y": 29,
+        "lat": -1.95,
+        "lon": -5.53,
+        "coordLabel": "1.95° S, 5.53° W",
+        "region": "Meridiani Planum",
+        "year": 2004,
+        "icon": "rover",
+        "nasaUrl": "https://science.nasa.gov/mission/mer-opportunity/"
+      },
+      {
+        "id": "spirit",
+        "name": "Spirit",
+        "fact": "spirit",
+        "state": "locked",
+        "x": 22,
+        "y": 48,
+        "lat": -14.57,
+        "lon": 175.47,
+        "coordLabel": "14.57° S, 175.47° E",
+        "region": "Gusev Crater",
+        "year": 2004,
+        "icon": "rover",
+        "nasaUrl": "https://science.nasa.gov/mission/mer-spirit/"
+      },
+      {
+        "id": "pathfinder",
+        "name": "Pathfinder + Sojourner",
+        "fact": "pathfinder",
+        "state": "locked",
+        "x": 78,
+        "y": 67,
+        "lat": 19.13,
+        "lon": -33.22,
+        "coordLabel": "19.13° N, 33.22° W",
+        "region": "Ares Vallis",
+        "year": 1997,
+        "icon": "probe",
+        "nasaUrl": "https://science.nasa.gov/mission/mars-pathfinder/"
+      },
+      {
+        "id": "viking1",
+        "name": "Viking 1",
+        "fact": "viking1",
+        "state": "locked",
+        "x": 22,
+        "y": 86,
+        "lat": 22.48,
+        "lon": -47.97,
+        "coordLabel": "22.48° N, 47.97° W",
+        "region": "Chryse Planitia",
+        "year": 1976,
+        "icon": "lander",
+        "nasaUrl": "https://science.nasa.gov/mission/viking-1/"
+      }
+    ]
+  }
+}
