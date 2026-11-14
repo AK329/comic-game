@@ -51,3 +51,15 @@ html,body{min-height:100%;overflow-x:hidden}body{margin:0}button,a,input{-webkit
  .book-binding{box-shadow:0 12px 18px -8px #301c1980,0 0 0 1px #173c58,inset 0 0 0 4px #2c648c}
  .desk:before{box-shadow:none}
 }
+
+/* Flip performance: a pre-rasterized grain tile replaces the per-paint SVG
+   noise filter, and gradient spine shading replaces blurred inset shadows. */
+.paper{background-image:url("./assets/paper/grain.webp");background-size:180px 180px;contain:paint}
+.left-paper,.right-paper{box-shadow:none}
+.left-paper:after,.right-paper:after{content:"";position:absolute;inset:0;pointer-events:none}
+.left-paper:after{background:linear-gradient(270deg,#5f4d3159 0,#5f4d3124 6px,#5f4d3100 16px),linear-gradient(90deg,#fffae8 0,#fffae800 2px)}
+.right-paper:after{background:linear-gradient(90deg,#5f4d3159 0,#5f4d3124 6px,#5f4d3100 16px),linear-gradient(270deg,#fffae8 0,#fffae800 2px)}
+.book-experience[data-page-turning="true"] .paper *{backdrop-filter:none!important}
+.book-experience[data-page-turning="true"] .memory-cloud{filter:none}
+.book-experience:fullscreen,.book-experience::backdrop{background-color:#7f573a}
+@media(max-width:640px){.paper{background-image:none}}

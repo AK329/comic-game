@@ -43,11 +43,16 @@ import { createPortal } from "react-dom"
 import { ArrowLeft } from "lucide-react"
 import BookApp from "../../BookApp.jsx"
 import cover from "../../assets/hardcover/reference-cover.webp"
+import { decodeElements, withTimeout } from "../../lib/decodeImages.js"
 
 const coverUrl = typeof cover === "string" ? cover : cover.src
 const StableBook = memo(BookApp)
-const DURATION = 1200
-const EASING = "cubic-bezier(0.645, 0.045, 0.355, 1)"
+const DURATION = 900
+const REDUCED_DURATION = 360
+const EASING = "cubic-bezier(0.45, 0, 0.55, 1)"
+const VIEWPORT_SETTLE_MS = 300
+const FIRST_SPREAD_TIMEOUT_MS = 1500
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 const FRAME = { width: 1040, height: 720 }
 const CLOSED_LID = "rotateY(0deg) translateZ(4px)"
 const OPEN_LID = "rotateY(-180deg) translateZ(4px)"
@@ -328,15 +333,25 @@ export default function BookExperience() {
   const timeline = useCallback(
     (value, reverse = false, paused = false) => {
       if (!value) return []
+      const reduced =
+        !paused && matchMedia("(prefers-reduced-motion: reduce)").matches
       const options = {
-        duration:
-          !paused && matchMedia("(prefers-reduced-motion: reduce)").matches
-            ? 0
-            : DURATION,
-        easing: EASING,
+        duration: reduced ? REDUCED_DURATION : DURATION,
+        easing: reduced ? "linear" : EASING,
         fill: "both",
         direction: reverse ? "reverse" : "normal",
       }
+      // Reduced motion swaps poses at the midpoint of a crossfade instead of
+      // swinging the cover.
+      const step = (from, to) =>
+        reduced
+          ? [
+              { transform: from },
+              { transform: from, offset: 0.5 },
+              { transform: to, offset: 0.5 },
+              { transform: to },
+            ]
+          : [{ transform: from }, { transform: to }]
       const list = []
       const add = (element, frames) => {
         if (!element) return
@@ -347,24 +362,35 @@ export default function BookExperience() {
         } else animation.startTime = document.timeline.currentTime
         list.push(animation)
       }
-      add(host.binding, [
-        { transform: value.closed },
-        { transform: "translate3d(0,0,0) rotateZ(0deg) scale(1,1)" },
-      ])
-      add(lid.current, [{ transform: CLOSED_LID }, { transform: OPEN_LID }])
-      add(board.current, [
-        { transform: "translateZ(-12px) rotateY(180deg)" },
-        { transform: "translateZ(-12px) rotateY(0deg)" },
-      ])
+      const openBinding = "translate3d(0,0,0) rotateZ(0deg) scale(1,1)"
+      add(
+        host.binding,
+        reduced
+          ? [
+              { transform: value.closed, opacity: 1 },
+              { transform: value.closed, opacity: 0, offset: 0.5 },
+              { transform: openBinding, opacity: 0, offset: 0.5 },
+              { transform: openBinding, opacity: 1 },
+            ]
+          : step(value.closed, openBinding),
+      )
+      add(lid.current, step(CLOSED_LID, OPEN_LID))
+      add(
+        board.current,
+        step(
+          "translateZ(-12px) rotateY(180deg)",
+          "translateZ(-12px) rotateY(0deg)",
+        ),
+      )
       if (value.left) {
         sheet.current = value.left
         value.left.classList.add("experience-turning-sheet")
-        add(value.left, [
-          { transform: `${value.base} rotateY(180deg)` },
-          { transform: `${value.base} rotateY(0deg)` },
-        ])
+        add(
+          value.left,
+          step(`${value.base} rotateY(180deg)`, `${value.base} rotateY(0deg)`),
+        )
       }
-      add(shadow.current, [
+      add(shadow.current, reduced ? [{ opacity: 0 }, { opacity: 0 }] : [
         { transform: "translateX(0) scaleX(1)", opacity: 0.08 },
         {
           transform: "translateX(-18%) scaleX(.25)",
@@ -485,15 +511,23 @@ export default function BookExperience() {
     if (view.mobile) {
       try {
         if (root.current.requestFullscreen && !document.fullscreenElement)
-          await bounded(root.current.requestFullscreen())
+          await bounded(root.current.requestFullscreen({ navigationUI: "hide" }))
       } catch {}
-      if (screen.orientation?.lock)
-        bounded(screen.orientation.lock("landscape")).catch(() => {})
+      try {
+        if (screen.orientation?.lock)
+          await bounded(screen.orientation.lock("landscape"))
+      } catch {}
     }
     controller.current?.turnToPage(0)
+    // Let fullscreen and rotation finish resizing before measuring, and make
+    // sure the first spread is decoded so the cover never opens onto blank paper.
+    await nextFrame()
+    await nextFrame()
+    await wait(view.mobile ? VIEWPORT_SETTLE_MS : 0)
     measureViewport()
     await nextFrame()
-    await nextFrame()
+    await withTimeout(decodeElements(host?.block), FIRST_SPREAD_TIMEOUT_MS)
+    if (phaseRef.current !== "closed") return setPreparing(false)
     const value = geometry()
     const id = ++token.current
     setPreparing(false)

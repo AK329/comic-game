@@ -5,9 +5,11 @@ import {
   useState,
   useRef,
   forwardRef,
+  memo,
   useEffect,
 } from "react"
 import HTMLFlipBook from "./components/StableFlipBook.jsx"
+import pageAssets from "./data/pageAssets.js"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   ArrowLeft,
@@ -73,7 +75,7 @@ function rememberBookPage(page) {
     window.sessionStorage.setItem(BOOK_PAGE_SESSION_KEY, String(page))
   } catch {}
 }
-const Page = forwardRef(function Page(
+const Page = memo(forwardRef(function Page(
   { children, number, label, className = "" },
   ref,
 ) {
@@ -111,7 +113,7 @@ const Page = forwardRef(function Page(
       </div>
     </div>
   )
-})
+}))
 function Robot({ onClick, label, happy, floating = true }) {
   return (
     <motion.button
@@ -384,6 +386,7 @@ export default function BookApp({
               {mounted && (
                 <HTMLFlipBook
                   ref={book}
+                  pageAssets={pageAssets}
                   width={480}
                   height={600}
                   size="stretch"
