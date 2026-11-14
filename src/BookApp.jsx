@@ -6,6 +6,7 @@ import {
   useRef,
   forwardRef,
   useEffect,
+  memo,
 } from "react"
 import HTMLFlipBook from "./components/StableFlipBook.jsx"
 import { motion, AnimatePresence } from "framer-motion"
@@ -73,45 +74,44 @@ function rememberBookPage(page) {
     window.sessionStorage.setItem(BOOK_PAGE_SESSION_KEY, String(page))
   } catch {}
 }
-const Page = forwardRef(function Page(
-  { children, number, label, className = "" },
-  ref,
-) {
-  const navigation = useContext(PageNavigation)
-  const previous = number % 2 === 1
-  return (
-    <div
-      ref={ref}
-      className={`paper ${
-        number % 2 ? "left-paper" : "right-paper"
-      } ${className}`}
-    >
-      <div className="paper-content">{children}</div>
-      {number >= 4 &&
-        number <= 12 &&
-        number !== 10 &&
-        number !== 11 &&
-        navigation && (
-          <button
-            type="button"
-            className={`book-page-nav ${
-              previous ? "book-page-prev" : "book-page-next"
-            }`}
-            aria-label={
-              previous ? navigation.text.previous : navigation.text.next
-            }
-            onClick={previous ? navigation.previous : navigation.next}
-          >
-            {previous ? <ArrowLeft size={23} /> : <ArrowRight size={23} />}
-          </button>
-        )}
-      <div className="page-foot">
-        <span>{label}</span>
-        <span>{String(number).padStart(2, "0")}</span>
+const Page = memo(
+  forwardRef(function Page({ children, number, label, className = "" }, ref) {
+    const navigation = useContext(PageNavigation)
+    const previous = number % 2 === 1
+    return (
+      <div
+        ref={ref}
+        className={`paper ${
+          number % 2 ? "left-paper" : "right-paper"
+        } ${className}`}
+      >
+        <div className="paper-content">{children}</div>
+        {number >= 4 &&
+          number <= 12 &&
+          number !== 10 &&
+          number !== 11 &&
+          navigation && (
+            <button
+              type="button"
+              className={`book-page-nav ${
+                previous ? "book-page-prev" : "book-page-next"
+              }`}
+              aria-label={
+                previous ? navigation.text.previous : navigation.text.next
+              }
+              onClick={previous ? navigation.previous : navigation.next}
+            >
+              {previous ? <ArrowLeft size={23} /> : <ArrowRight size={23} />}
+            </button>
+          )}
+        <div className="page-foot">
+          <span>{label}</span>
+          <span>{String(number).padStart(2, "0")}</span>
+        </div>
       </div>
-    </div>
-  )
-})
+    )
+  }),
+)
 function Robot({ onClick, label, happy, floating = true }) {
   return (
     <motion.button
@@ -392,6 +392,7 @@ export default function BookApp({
                   minHeight={550}
                   maxHeight={680}
                   maxShadowOpacity={immersiveMobile ? 0.12 : 0.25}
+                  drawShadow={false}
                   showCover={false}
                   mobileScrollSupport={false}
                   usePortrait={false}

@@ -46,14 +46,36 @@ import cover from "../../assets/hardcover/reference-cover.webp"
 
 const coverUrl = typeof cover === "string" ? cover : cover.src
 const StableBook = memo(BookApp)
-const DURATION = 1200
-const EASING = "cubic-bezier(0.645, 0.045, 0.355, 1)"
+const DURATION = 900
+const EASING = "ease-in-out"
 const FRAME = { width: 1040, height: 720 }
 const CLOSED_LID = "rotateY(0deg) translateZ(4px)"
 const OPEN_LID = "rotateY(-180deg) translateZ(4px)"
 const BOOK_SESSION_KEY = "little-explorer-book-open"
 const BOOK_PAGE_SESSION_KEY = "little-explorer-book-page"
 const nextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve))
+const waitForResize = async () => {
+  await nextFrame()
+  await nextFrame()
+  await new Promise((resolve) => setTimeout(resolve, 300))
+}
+async function decodeImages(images) {
+  await Promise.all(
+    images.map(async (image) => {
+      if (!image.complete) {
+        await new Promise((resolve) => {
+          image.addEventListener("load", resolve, { once: true })
+          image.addEventListener("error", resolve, { once: true })
+        })
+      }
+      if (typeof image.decode === "function") {
+        try {
+          await image.decode()
+        } catch {}
+      }
+    }),
+  )
+}
 function readBookSession() {
   if (typeof window === "undefined") return false
   try {
@@ -120,7 +142,6 @@ export default function BookExperience() {
   const animations = useRef([])
   const sheet = useRef(null)
   const token = useRef(0)
-  const ownedFullscreen = useRef(false)
   const pose = useRef(null)
   const deferredResize = useRef(false)
   const controller = useRef(null)
@@ -328,12 +349,12 @@ export default function BookExperience() {
   const timeline = useCallback(
     (value, reverse = false, paused = false) => {
       if (!value) return []
+      const reducedMotion = matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches
       const options = {
-        duration:
-          !paused && matchMedia("(prefers-reduced-motion: reduce)").matches
-            ? 0
-            : DURATION,
-        easing: EASING,
+        duration: paused ? DURATION : reducedMotion ? 180 : DURATION,
+        easing: reducedMotion ? "linear" : EASING,
         fill: "both",
         direction: reverse ? "reverse" : "normal",
       }
@@ -351,7 +372,12 @@ export default function BookExperience() {
         { transform: value.closed },
         { transform: "translate3d(0,0,0) rotateZ(0deg) scale(1,1)" },
       ])
-      add(lid.current, [{ transform: CLOSED_LID }, { transform: OPEN_LID }])
+      add(
+        lid.current,
+        reducedMotion
+          ? [{ opacity: 1 }, { opacity: 0 }]
+          : [{ transform: CLOSED_LID }, { transform: OPEN_LID }],
+      )
       add(board.current, [
         { transform: "translateZ(-12px) rotateY(180deg)" },
         { transform: "translateZ(-12px) rotateY(0deg)" },
@@ -382,7 +408,10 @@ export default function BookExperience() {
   const restOpen = useCallback(() => {
     cancelAnimations()
     if (host) host.binding.style.transform = "none"
-    if (lid.current) lid.current.style.transform = OPEN_LID
+    if (lid.current) {
+      lid.current.style.transform = OPEN_LID
+      lid.current.style.opacity = "1"
+    }
     if (board.current)
       board.current.style.transform = "translateZ(-12px) rotateY(0deg)"
     if (shadow.current) shadow.current.style.opacity = "0"
@@ -393,9 +422,6 @@ export default function BookExperience() {
     try {
       screen.orientation?.unlock?.()
     } catch {}
-    if (document.fullscreenElement === root.current)
-      document.exitFullscreen().catch(() => {})
-    ownedFullscreen.current = false
     requestAnimationFrame(() => lid.current?.focus({ preventScroll: true }))
   }, [mode])
   useLayoutEffect(() => {
@@ -484,16 +510,21 @@ export default function BookExperience() {
     setPreparing(true)
     if (view.mobile) {
       try {
-        if (root.current.requestFullscreen && !document.fullscreenElement)
-          await bounded(root.current.requestFullscreen())
+        if (screen.orientation?.lock)
+          await bounded(screen.orientation.lock("landscape"))
       } catch {}
-      if (screen.orientation?.lock)
-        bounded(screen.orientation.lock("landscape")).catch(() => {})
     }
     controller.current?.turnToPage(0)
     measureViewport()
-    await nextFrame()
-    await nextFrame()
+    await waitForResize()
+    const firstSpreadImages = [
+      document.querySelector(".hardcover-front img"),
+      ...Array.from(root.current?.querySelectorAll(".paper img") || []).slice(
+        0,
+        4,
+      ),
+    ].filter(Boolean)
+    await decodeImages(firstSpreadImages)
     const value = geometry()
     const id = ++token.current
     setPreparing(false)
@@ -509,14 +540,6 @@ export default function BookExperience() {
   }
 
   useEffect(() => {
-    const fullscreen = () => {
-      if (document.fullscreenElement === root.current)
-        ownedFullscreen.current = true
-      else if (ownedFullscreen.current && !document.fullscreenElement) {
-        ownedFullscreen.current = false
-        close()
-      }
-    }
     const keyboard = (event) => {
       if (
         event.key === "Escape" &&
@@ -524,10 +547,8 @@ export default function BookExperience() {
       )
         close()
     }
-    document.addEventListener("fullscreenchange", fullscreen)
     document.addEventListener("keydown", keyboard)
     return () => {
-      document.removeEventListener("fullscreenchange", fullscreen)
       document.removeEventListener("keydown", keyboard)
     }
   }, [close])
@@ -546,13 +567,9 @@ export default function BookExperience() {
       preference.removeEventListener("change", skip)
       token.current++
       cancelAnimations()
-      if (ownedFullscreen.current) {
-        try {
-          screen.orientation?.unlock?.()
-        } catch {}
-        if (document.fullscreenElement === root.current)
-          document.exitFullscreen().catch(() => {})
-      }
+      try {
+        screen.orientation?.unlock?.()
+      } catch {}
     }
   }, [cancelAnimations])
 
@@ -683,7 +700,7 @@ const STYLES = `
 .experience-turning-sheet{transform-origin:right center!important;backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important;will-change:transform}
 .hardcover-lid{position:absolute;margin:0;padding:0;background:none;border:0;border-radius:4px;transform-origin:left center;transform-style:preserve-3d;will-change:transform;transform:rotateY(0deg) translateZ(4px)}
 .hardcover-lid:disabled{cursor:default}
-.phase-open .hardcover-lid{pointer-events:none}
+.phase-open .hardcover-lid{pointer-events:none;opacity:0}
 .hardcover-lid:focus-visible{outline:3px solid var(--paper);outline-offset:12px}
 .hardcover-front,.hardcover-endpaper{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .hardcover-front img{display:block;width:100%;height:100%;user-select:none}

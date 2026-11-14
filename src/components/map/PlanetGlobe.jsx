@@ -43,7 +43,7 @@ export default function PlanetGlobe({
       return
     }
     setUnavailable(false)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
     renderer.setClearColor(0x000000, 0)
     host.prepend(renderer.domElement)
     const scene = new THREE.Scene()
@@ -96,6 +96,7 @@ export default function PlanetGlobe({
     const direction = new THREE.Vector3()
     let frame
     let contextLost = false
+    const bookRoot = document.querySelector(".book-experience")
     const resize = () => {
       const { width, height } = host.getBoundingClientRect()
       if (!width || !height) return
@@ -109,6 +110,12 @@ export default function PlanetGlobe({
     function draw() {
       if (contextLost) return
       frame = requestAnimationFrame(draw)
+      if (
+        bookRoot?.dataset.pageTurning === "true" ||
+        bookRoot?.classList.contains("phase-opening") ||
+        bookRoot?.classList.contains("phase-closing")
+      )
+        return
       controls.update()
       direction.copy(camera.position).normalize()
       positions.forEach((position, index) => {

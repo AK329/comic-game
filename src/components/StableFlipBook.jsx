@@ -11,10 +11,15 @@ import {
   useImperativeHandle,
   useMemo,
   useRef,
+  useState,
 } from "react"
 import HTMLFlipBook from "react-pageflip"
 
-const LivePages = createContext([])
+const LivePages = createContext({
+  pages: [],
+  firstLivePage: 0,
+  lastLivePage: -1,
+})
 const memoizedContents = new WeakMap()
 
 function LiveContent({ element }) {
@@ -46,7 +51,14 @@ function LiveContent({ element }) {
 }
 
 const LivePage = forwardRef(function LivePage({ index }, ref) {
-  const pages = useContext(LivePages)
+  const { pages, firstLivePage, lastLivePage } = useContext(LivePages)
+  const isLive = index >= firstLivePage && index <= lastLivePage
+  if (!isLive) {
+    return cloneElement(pages[index], {
+      ref,
+      children: null,
+    })
+  }
   return cloneElement(pages[index], {
     ref,
     children: <LiveContent element={pages[index].props.children} />,
@@ -56,10 +68,11 @@ const LivePage = forwardRef(function LivePage({ index }, ref) {
 // react-pageflip rebuilds its DOM when its children array changes. Keep those
 // slots stable while context delivers live game, language, and progress updates.
 const StableFlipBook = forwardRef(function StableFlipBook(
-  { children, ...settings },
+  { children, onFlip, ...settings },
   ref,
 ) {
   const flip = useRef(null)
+  const [activePage, setActivePage] = useState(settings.startPage || 0)
   useImperativeHandle(
     ref,
     () => ({
@@ -68,6 +81,9 @@ const StableFlipBook = forwardRef(function StableFlipBook(
     [],
   )
   const pages = Children.toArray(children)
+  const currentSpread = activePage - (activePage % 2)
+  const firstLivePage = Math.max(0, currentSpread - 4)
+  const lastLivePage = Math.min(pages.length - 1, currentSpread + 5)
   const slots = useMemo(
     () =>
       Array.from({ length: pages.length }, (_, index) => (
@@ -75,6 +91,10 @@ const StableFlipBook = forwardRef(function StableFlipBook(
       )),
     [pages.length],
   )
+  const handleFlip = (event) => {
+    setActivePage(event.data)
+    onFlip?.(event)
+  }
   useEffect(() => {
     let frame
     let observer
@@ -98,9 +118,35 @@ const StableFlipBook = forwardRef(function StableFlipBook(
       observer?.disconnect()
     }
   }, [pages.length])
+  useEffect(() => {
+    let cancelled = false
+    const decodeNearbyImages = async () => {
+      const images = Array.from(
+        document.querySelectorAll(".stf__block .paper img"),
+      )
+      await Promise.all(
+        images.map(async (image) => {
+          if (typeof image.decode !== "function") return
+          try {
+            await image.decode()
+          } catch {}
+        }),
+      )
+      if (cancelled) return
+    }
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(decodeNearbyImages)
+      : window.setTimeout(decodeNearbyImages, 120)
+    return () => {
+      cancelled = true
+      if (window.cancelIdleCallback && typeof idle === "number")
+        window.cancelIdleCallback(idle)
+      else window.clearTimeout(idle)
+    }
+  }, [activePage, firstLivePage, lastLivePage])
   return (
-    <LivePages.Provider value={pages}>
-      <HTMLFlipBook {...settings} ref={flip}>
+    <LivePages.Provider value={{ pages, firstLivePage, lastLivePage }}>
+      <HTMLFlipBook {...settings} onFlip={handleFlip} ref={flip}>
         {slots}
       </HTMLFlipBook>
     </LivePages.Provider>
