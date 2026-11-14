@@ -34,6 +34,7 @@ react(),
       host: process.env.FIGMA_DEV_SERVER_HOST || '0.0.0.0',
       port: parseInt(process.env.PORT || '8443'),
       strictPort: true,
+      allowedHosts: ['sb-52uyjewsfnto.vercel.run'],
       watch: {
         ignored: [
           '**/.figma/**',
